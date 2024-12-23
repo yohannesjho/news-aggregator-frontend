@@ -3,7 +3,7 @@ const { SearchIcon } = require("lucide-react")
 const Header = () => {
     return (
 
-    <header className="bg-gradient-to-r from-blue-200 to-silver-100 px-8 py-8 h-32 flex justify-between">
+    <header className="bg-gradient-to-r from-blue-200 to-silver-100 px-8 py-8 h-32 flex justify-between items-center">
          <nav>
             <ul className="flex space-x-6">
                 <li><a>All news</a></li>
