@@ -2,7 +2,7 @@ import { Instagram, Twitter, Facebook } from 'lucide-react';
 const Footer = () => {
     return (
         <footer>
-            <div className="px-8 py-8 flex justify-between items-center">
+            <div className="px-8 py-8 flex  justify-between items-center text-sm lg:text-lg">
                 <div>
                     <div>News</div>
                     <div className='flex space-x-2'>
