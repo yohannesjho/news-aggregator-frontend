@@ -2,6 +2,8 @@ import Image from "next/image";
 import ImageWithNews from "./components/ImageWithNews";
 import Tech from "./components/Tech";
 import Sport from "./components/Sport";
+import Sience from "./components/Sience";
+import Politics from "./components/Politics";
 
 export default function Home() {
   const newsTitles = [
@@ -48,6 +50,8 @@ export default function Home() {
       />
       <Tech tech={tech}/>
       <Sport tech={tech}/>
+      <Sience tech={tech} />
+      <Politics tech={tech} />
     </div>
   )
 }
