@@ -1,6 +1,7 @@
 import Image from "next/image";
 import ImageWithNews from "./components/ImageWithNews";
 import Tech from "./components/Tech";
+import Sport from "./components/Sport";
 
 export default function Home() {
   const newsTitles = [
@@ -46,6 +47,7 @@ export default function Home() {
 
       />
       <Tech tech={tech}/>
+      <Sport tech={tech}/>
     </div>
   )
 }
