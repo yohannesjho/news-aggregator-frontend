@@ -4,6 +4,7 @@ import Tech from "./components/Tech";
 import Sport from "./components/Sport";
 import Sience from "./components/Sience";
 import Politics from "./components/Politics";
+import TopHeadlines from "./components/TopHeadlines";
 
 export default function Home() {
   const newsTitles = [
@@ -48,10 +49,12 @@ export default function Home() {
         newsTitles={newsTitles}
 
       />
+       
       <Tech tech={tech}/>
       <Sport tech={tech}/>
       <Sience tech={tech} />
       <Politics tech={tech} />
+     
     </div>
   )
 }

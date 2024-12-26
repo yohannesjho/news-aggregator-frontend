@@ -1,4 +1,5 @@
 const { SearchIcon, Menu } = require("lucide-react")
+const { default: Link } = require("next/link")
 
 const Header = () => {
     return (
@@ -6,13 +7,13 @@ const Header = () => {
         <header className="bg-gradient-to-r from-blue-200 to-silver-100 px-8 py-8 h-32 flex justify-between items-center">
             <nav className="hidden md:block text-sm lg:text-lg">
                 <ul className="flex space-x-6">
-                    <li><a className="cursor-pointer">All news</a></li>
-                    <li><a className="cursor-pointer">Top headlines</a></li>
-                    <li><a className="cursor-pointer">Business</a></li>
-                    <li><a className="cursor-pointer">Politics</a></li>
-                    <li><a className="cursor-pointer">Sport</a></li>
-                    <li><a className="cursor-pointer">Entertainment</a></li>
-                    <li><a className="cursor-pointer">Science</a></li>
+                    <li><Link href='/' className="cursor-pointer">All news</Link></li>
+                    <li><Link href="/topheadlines" className="cursor-pointer">Top headlines</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "business" } }} className="cursor-pointer">Business</Link></li>
+                    <li><Link href="/politics" className="cursor-pointer">Politics</Link></li>
+                    <li><Link href="/sport" className="cursor-pointer">Sport</Link></li>
+                    <li><Link href="/entertainment" className="cursor-pointer">Entertainment</Link></li>
+                    <li><Link href="sceince" className="cursor-pointer">Science</Link></li>
                 </ul>
 
             </nav>

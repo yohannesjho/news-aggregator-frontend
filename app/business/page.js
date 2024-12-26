@@ -1,16 +1,14 @@
-import { ArrowBigRight } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
-function Sience({ tech }) {
+function page() {
     return (
         <div className="px-8 py-8">
             <div className="grid grid-cols-4 gap-8">
                 <div className="col-span-3">
                     <div className="flex justify-between items-center my-8">
-                        <h2 className="md:text-2xl ">Sience News</h2>
-                        <a className="flex space-x-1 cursor-pointer hover:text-blue-400 duration-200">More in siences
-                            <ArrowBigRight /></a>
+                        <h2 className="md:text-2xl ">Tech News</h2>
+                        <a className="flex space-x-1 cursor-pointer hover:text-blue-400 duration-200">More in tech <ArrowBigRight /></a>
                     </div>
                     <div className="space-y-4">
                         {tech.map((item, index) => (
@@ -53,4 +51,4 @@ function Sience({ tech }) {
     )
 }
 
-export default Sience
+export default page
