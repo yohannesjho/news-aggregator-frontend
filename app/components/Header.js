@@ -8,7 +8,7 @@ const Header = () => {
             <nav className="hidden md:block text-sm lg:text-lg">
                 <ul className="flex space-x-6">
                     <li><Link href='/' className="cursor-pointer">All news</Link></li>
-                    <li><Link href="/topheadlines" className="cursor-pointer">Top headlines</Link></li>
+                    <li><Link href={{ pathname: "/topHeadlines" }} className="cursor-pointer">Top headlines</Link></li>
                     <li><Link href={{ pathname: "/category", query: { type: "business" } }} className="cursor-pointer">Business</Link></li>
                     <li><Link href={{ pathname: "/category", query: { type: "politics" } }} className="cursor-pointer">Politics</Link></li>
                     <li><Link href={{ pathname: "/category", query: { type: "sports" } }} className="cursor-pointer">Sports</Link></li>

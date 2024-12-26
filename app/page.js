@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import ImageWithNews from "./components/ImageWithNews";
 import Tech from "./components/Tech";
@@ -5,8 +6,38 @@ import Sport from "./components/Sport";
 import Sience from "./components/Sience";
 import Politics from "./components/Politics";
 import TopHeadlines from "./components/TopHeadlines";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+
+  const [news, setNews] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const keyword = 'all';
+        const response = await fetch(`http://localhost:5000/api/news?keyword=${keyword}`)
+
+        if(!response.ok) {
+          throw new Error("failed to fetch news")
+        }
+
+        const data = await response.json()
+
+        setNews(data.data.articles)
+      } catch (error) {
+          setError(error.message)
+      } finally {
+          setLoading(false)
+      }
+    }
+
+    fetchNews()
+  }, [])
+
+  console.log(news)
   const newsTitles = [
     {
       title: "NewBreakings:",
@@ -44,17 +75,17 @@ export default function Home() {
   return (
     <div>
       <ImageWithNews
-       
+
         imageUrls={imageUrls}
         newsTitles={newsTitles}
 
       />
-       
-      <Tech tech={tech}/>
-      <Sport tech={tech}/>
+
+      <Tech tech={tech} />
+      <Sport tech={tech} />
       <Sience tech={tech} />
       <Politics tech={tech} />
-     
+
     </div>
   )
 }
