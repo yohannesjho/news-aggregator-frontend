@@ -10,10 +10,13 @@ const Header = () => {
                     <li><Link href='/' className="cursor-pointer">All news</Link></li>
                     <li><Link href="/topheadlines" className="cursor-pointer">Top headlines</Link></li>
                     <li><Link href={{ pathname: "/category", query: { type: "business" } }} className="cursor-pointer">Business</Link></li>
-                    <li><Link href="/politics" className="cursor-pointer">Politics</Link></li>
-                    <li><Link href="/sport" className="cursor-pointer">Sport</Link></li>
-                    <li><Link href="/entertainment" className="cursor-pointer">Entertainment</Link></li>
-                    <li><Link href="sceince" className="cursor-pointer">Science</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "politics" } }} className="cursor-pointer">Politics</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "sports" } }} className="cursor-pointer">Sports</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "entertainment" } }} className="cursor-pointer">Entertainment</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "health" } }} className="cursor-pointer">Health</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "technology" } }} className="cursor-pointer">Technology</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "science" } }} className="cursor-pointer">Science</Link></li>
+                    <li><Link href={{ pathname: "/category", query: { type: "General" } }} className="cursor-pointer">General</Link></li>
                 </ul>
 
             </nav>
