@@ -1,91 +1,84 @@
-'use client'
-import Image from "next/image";
-import ImageWithNews from "./components/ImageWithNews";
-import Tech from "./components/Tech";
-import Sport from "./components/Sport";
-import Sience from "./components/Sience";
-import Politics from "./components/Politics";
-import TopHeadlines from "./components/TopHeadlines";
+'use client';
+
 import { useState, useEffect } from "react";
 
 export default function Home() {
-
-  const [news, setNews] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [randomNews, setRandomNews] = useState(null);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const keyword = 'all';
-        const response = await fetch(`http://localhost:5000/api/news?keyword=${keyword}`)
+        const response = await fetch(`http://localhost:5000/api/news`);
+        if (!response.ok) throw new Error("Failed to fetch news");
 
-        if(!response.ok) {
-          throw new Error("failed to fetch news")
-        }
-
-        const data = await response.json()
-
-        setNews(data.data.articles)
+        const data = await response.json();
+        setNews(data.data.articles);
+        setRandomNews(data.data.articles[Math.floor(Math.random() * data.data.articles.length)]);
       } catch (error) {
-          setError(error.message)
+        setError(error.message);
       } finally {
-          setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchNews()
-  }, [])
+    fetchNews();
+  }, []);
 
-  console.log(news)
-  const newsTitles = [
-    {
-      title: "NewBreakings:",
-      description: "  Global Economy Takes a Turn",
-    },
-    {
-      title: "Technology:",
-      description: " New Innovations in AI",
-    },
-    {
-      title: "sports",
-      description: "Local Team Wins Championship"
-    }
-  ];
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-  const tech = [
-    {
-      title: "NewBreakings:",
-      description: "  Global Economy Takes a Turn",
-      imgUrl: "https://websitedemos.net/tech-news-04/wp-content/uploads/sites/903/2021/07/tech-news-post-featured-img-22.jpg"
-    },
-    {
-      title: "Technology:",
-      description: " New Innovations in AI",
-      imgUrl: "https://websitedemos.net/tech-news-04/wp-content/uploads/sites/903/2021/07/tech-news-post-featured-img-11.jpg"
-    },
-    {
-      title: "sports",
-      description: "Local Team Wins Championship",
-      imgUrl: "https://websitedemos.net/tech-news-04/wp-content/uploads/sites/903/2021/07/tech-news-post-featured-img-03.jpg"
-    },
-
-  ]
-  const imageUrls = ["https://websitedemos.net/tech-news-04/wp-content/uploads/sites/903/2021/07/tech-news-post-featured-img-01.jpg", "https://websitedemos.net/tech-news-04/wp-content/uploads/sites/903/2021/07/tech-news-post-featured-img-09.jpg"]
   return (
-    <div>
-      <ImageWithNews
+    <div className="p-8">
+      {/* Billboard Section */}
+      {randomNews && (
+        <div className="mb-8">
+          <div className="relative h-96 w-full rounded-lg overflow-hidden shadow-lg">
+            <img
+              src={randomNews.urlToImage || "/default-image.jpg"}
+              alt={randomNews.title || "News"}
+              className="object-cover w-full h-full"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center text-white p-4">
+              <h1 className="text-3xl font-bold">{randomNews.title}</h1>
+              <p className="mt-4 text-lg">{randomNews.description}</p>
+              <a
+                href={randomNews.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-800"
+              >
+                Read More
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
-        imageUrls={imageUrls}
-        newsTitles={newsTitles}
-
-      />
-
-      <Tech tech={tech} />
-      <Sport tech={tech} />
-      <Sience tech={tech} />
-      <Politics tech={tech} />
-
+      {/* News Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {news.map((item, index) => (
+          <div key={index} className="p-4 border rounded-md shadow-sm bg-white">
+            <img
+              src={item.urlToImage || "/default-image.jpg"}
+              alt={item.title || "News"}
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+            <h2 className="text-lg font-semibold">{item.title}</h2>
+            <p className="text-gray-600">{item.description}</p>
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline mt-2 block"
+            >
+              Read More
+            </a>
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 }

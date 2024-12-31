@@ -1,12 +1,12 @@
 const { default: Image } = require("next/image")
 
 const ImageWithNews = ({ imageUrls, newsTitles }) => {
-    console.log(imageUrls[0])
+    // console.log(imageUrls)
     return (
         <div className="grid grid-cols-4 gap-8 px-8 py-8">
             <div className="col-span-3 relative w-full">
                 <Image
-                    src={imageUrls[0]}
+                    src={imageUrls}
                     alt="News Image"
                     layout="responsive"
                     width={1200} // The base width of the image
@@ -25,7 +25,7 @@ const ImageWithNews = ({ imageUrls, newsTitles }) => {
             </div>
             <div className="grid-cols-1">
                 <Image
-                    src={imageUrls[1]}
+                    src={imageUrls}
                     alt="News Image"
                     layout="responsive"
                     width={1200} // The base width of the image
