@@ -7,6 +7,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [randomNews, setRandomNews] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [filteredNews, setFilteredNews] = useState([]); // State for filtered news
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -16,6 +18,7 @@ export default function Home() {
 
         const data = await response.json();
         setNews(data.data.articles);
+        setFilteredNews(data.data.articles); // Initially, show all news
         setRandomNews(data.data.articles[Math.floor(Math.random() * data.data.articles.length)]);
       } catch (error) {
         setError(error.message);
@@ -27,11 +30,30 @@ export default function Home() {
     fetchNews();
   }, []);
 
+  // Filter news based on the search query
+  useEffect(() => {
+    const filtered = news.filter((item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredNews(filtered);
+  }, [searchQuery, news]);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="p-8">
+      {/* Search Input */}
+      <div className="mb-8">
+        <input
+          type="text"
+          placeholder="Search for news by title..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full border rounded-md p-2"
+        />
+      </div>
+
       {/* Billboard Section */}
       {randomNews && (
         <div className="mb-8">
@@ -59,7 +81,7 @@ export default function Home() {
 
       {/* News Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {news.map((item, index) => (
+        {filteredNews.map((item, index) => (
           <div key={index} className="p-4 border rounded-md shadow-sm bg-white">
             <img
               src={item.urlToImage || "/default-image.jpg"}

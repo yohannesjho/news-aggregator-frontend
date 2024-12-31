@@ -14,16 +14,29 @@ export default function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await fetch('http://localhost:5000/api/signin', {
+      const response = await fetch('http://localhost:5000/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+
+
       if (!response.ok) throw new Error('Signin failed');
+
       const data = await response.json();
-      console.log('Signin successful:', data);
-      router.push('/dashboard'); // Redirect to a protected page after successful signin
+
+      console.log(data.user)
+
+      //set the token to local storage
+
+      localStorage.setItem('user', data.user)
+
+       
+
+      
+      router.push('/'); // Redirect to a protected page after successful signin
     } catch (err) {
       setError(err.message);
     }

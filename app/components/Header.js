@@ -1,7 +1,22 @@
+'use client'
+
 const { SearchIcon, Menu } = require("lucide-react")
-const { default: Link } = require("next/link")
+const { default: Link } = require("next/link");
+const { useState, useEffect } = require("react");
 
 const Header = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = () => {
+            // Check authentication status  
+            const user = localStorage.getItem('user');
+            console.log('user', user)
+            setIsAuthenticated(user !== null); // Example: if user is found in localStorage, they're authenticated
+        };
+
+        checkAuth();
+    }, []);
     return (
 
         <header className="bg-gradient-to-r from-blue-200 to-silver-100 px-8 py-8 h-32 flex justify-between items-center">
@@ -22,12 +37,27 @@ const Header = () => {
             </nav>
             <Menu className="md:hidden" />
             <div className="flex space-x-4 text-sm lg:text-lg">
-                <div className="flex space-x-1 items-center">
-                    <input className="w-24 md:w-40 border-2 rounded-md outline-none px-2 text-sm md:text-base" placeholder="search for news" />
-                    <SearchIcon />
-                </div>
-                <button className="text-sm">Signin</button>
+                
+
+                {/* Conditionally render buttons based on authentication */}
+                {isAuthenticated ? (
+                    <Link href="/dashboard">
+                        <button className="text-sm">Dashboard</button>
+                    </Link>
+                ) : (
+                    <>
+                        <Link href="/signin">
+                            <button className="text-sm">Signin</button>
+                        </Link>
+                        <Link href="/signup">
+                            <button className="text-sm">Signup</button>
+                        </Link>
+                    </>
+                )}
+
             </div>
+
+
 
         </header>
     )
