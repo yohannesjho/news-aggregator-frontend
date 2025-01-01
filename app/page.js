@@ -10,10 +10,15 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [filteredNews, setFilteredNews] = useState([]); // State for filtered news
 
+
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  console.log(apiBaseUrl)
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/news`);
+        const response = await fetch(`${apiBaseUrl}/api/news`);
+       
         if (!response.ok) throw new Error("Failed to fetch news");
 
         const data = await response.json();
@@ -59,7 +64,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="relative h-96 w-full rounded-lg overflow-hidden shadow-lg">
             <img
-              src={randomNews.urlToImage || "/default-image.jpg"}
+              src={randomNews.urlToImage}
               alt={randomNews.title || "News"}
               className="object-cover w-full h-full"
             />
@@ -84,7 +89,7 @@ export default function Home() {
         {filteredNews.map((item, index) => (
           <div key={index} className="p-4 border rounded-md shadow-sm bg-white">
             <img
-              src={item.urlToImage || "/default-image.jpg"}
+              src={item.urlToImage}
               alt={item.title || "News"}
               className="w-full h-48 object-cover rounded-md mb-4"
             />

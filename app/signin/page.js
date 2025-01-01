@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Signin() {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -16,7 +19,7 @@ export default function Signin() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signin', {
+      const response = await fetch(`${apiBaseUrl}/api/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

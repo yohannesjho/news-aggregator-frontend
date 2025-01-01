@@ -11,7 +11,7 @@ const Header = () => {
         const checkAuth = () => {
             // Check authentication status  
             const user = localStorage.getItem('user');
-            console.log('user', user)
+             
             setIsAuthenticated(user !== null); // Example: if user is found in localStorage, they're authenticated
         };
 

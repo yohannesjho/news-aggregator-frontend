@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from 'react'
 
 const CategoryPage = () => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const searchParams = useSearchParams();
     const type = searchParams.get("type");
 
@@ -22,7 +24,7 @@ const CategoryPage = () => {
         setLoading(true);
         try {
             
-            let endpoint = `http://localhost:5000/api/news/topheadlines/${type}?`;
+            let endpoint = `${apiBaseUrl}/api/news/topheadlines/${type}?`;
 
             // Apply the filters to the endpoint
 

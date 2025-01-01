@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Signup() {
+
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const [formData, setFormData] = useState({ userName: '', email: '', password: '' });
     const [error, setError] = useState(null);
     const router = useRouter();
@@ -15,7 +18,7 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/api/auth/signup', {
+            const response = await fetch(`${apiBaseUrl}/api/auth/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
@@ -11,7 +13,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchUser = async () => {
             const token = localStorage.getItem('user');
-            console.log(token)
+             
 
             if (!token) {
                 router.push('/signin'); // Redirect if no token
@@ -19,7 +21,7 @@ export default function Dashboard() {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/auth/profile', {
+                const response = await fetch(`${apiBaseUrl}/api/auth/profile`, {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${token}` },
                 });
