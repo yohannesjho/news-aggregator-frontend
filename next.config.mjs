@@ -3,6 +3,7 @@ const nextConfig = {
     images: {
         domains: ['websitedemos.net',"gizmodo.com"], 
       },
+      
 };
 
 export default nextConfig;

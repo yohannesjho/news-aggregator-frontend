@@ -1,44 +1,31 @@
-'use client'
-import { useSearchParams } from "next/navigation";
+'use client';
 
-import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
 
-const CategoryPage = () => {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-    const searchParams = useSearchParams();
-    const type = searchParams.get("type");
-
+const NewsContent = ({ type, apiBaseUrl }) => {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filters, setFilters] = useState({
-        keyword: "",
-        language: "",
-        country: "",
+        keyword: '',
+        language: '',
+        country: '',
     });
-
-
 
     const fetchNews = async (filters = {}) => {
         setLoading(true);
         try {
-            
             let endpoint = `${apiBaseUrl}/api/news/topheadlines/${type}?`;
-
-            // Apply the filters to the endpoint
 
             if (filters.keyword) endpoint += `&keyword=${filters.keyword}`;
             if (filters.language) endpoint += `&language=${filters.language}`;
             if (filters.country) endpoint += `&country=${filters.country}`;
 
-
             const response = await fetch(endpoint);
-
-            if (!response.ok) throw new Error("Failed to fetch news data");
+            if (!response.ok) throw new Error('Failed to fetch news data');
             const data = await response.json();
-            // console.log(data.data.articles)
-            setNews(data.data.articles); // Assuming `articles` contains the news data
+            setNews(data.data.articles);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -46,35 +33,27 @@ const CategoryPage = () => {
         }
     };
 
-
-
     useEffect(() => {
         fetchNews(filters);
     }, [filters, type]);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-
-
         setFilters((prevFilters) => ({
             ...prevFilters,
             [name]: value,
         }));
     };
 
-    if (!type) return <div>No category selected.</div>;
-
     if (loading) return <div>Loading news...</div>;
-
     if (error) return <div>Error: {error}</div>;
 
     return (
-
-
-        <div className="p-8">
-
+        <div>
             {/* Filter Controls */}
             <div className="space-x-4 mb-4">
+                {/* Country Filter */}
+                
                 <select
                     name="country"
                     value={filters.country}
@@ -92,9 +71,15 @@ const CategoryPage = () => {
                     <option value="fr">France</option>
                     <option value="it">Italy</option>
                     <option value="in">India</option>
-                    {/* Add more countries */}
+                    <option value="za">South Africa</option>
+                    <option value="br">Brazil</option>
+                    <option value="mx">Mexico</option>
+                    <option value="kr">South Korea</option>
+                    <option value="ru">Russia</option>
+                  
                 </select>
 
+                {/* Language Filter */}
                 <select
                     name="language"
                     value={filters.language}
@@ -105,9 +90,17 @@ const CategoryPage = () => {
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
                     <option value="fr">French</option>
-                    {/* Add more languages */}
+                    <option value="de">German</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ru">Russian</option>
+                    <option value="ar">Arabic</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="hi">Hindi</option>
+                    
                 </select>
 
+                {/* Keyword Filter */}
                 <select
                     name="keyword"
                     value={filters.keyword}
@@ -115,28 +108,22 @@ const CategoryPage = () => {
                     className="p-2 border rounded"
                 >
                     <option value="">Select Keyword</option>
-                    <option value="bitcoin">bitcoin</option>
-                    <option value="machine-learning">machinelearning</option>
-                    <option value="quantum-computing">quantum computing</option>
-                    <option value="stock-market">stock market</option>
-                    <option value="investments">investments</option>
-                    <option value="startups">startups</option>
-                    <option value="Olympics">Olympics</option>
-                    <option value="World Cup">World Cup</option>
-                    <option value="NBA">NBA</option>
-                    <option value="tennis">tennis</option>
-                    <option value="crickets">cricket</option>
-                    <option value="elections">election</option>
-                    <option value="policy">policy</option>
-                    <option value="parliaments">parliament</option>
-                    <option value="laws">laws</option>
-                    <option value="vaccine">vaccine</option>
-                    <option value="vaccine">vaccine</option>
-                    <option value="fitness">fitness</option>
-                    {/* Add more sources */}
+                    <option value="technology">Technology</option>
+                    <option value="sports">Sports</option>
+                    <option value="politics">Politics</option>
+                    <option value="health">Health</option>
+                    <option value="business">Business</option>
+                    <option value="science">Science</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="travel">Travel</option>
+                    <option value="education">Education</option>
+                    <option value="environment">Environment</option>
+                   
                 </select>
+
             </div>
 
+            {/* News Content */}
             <h1 className="text-2xl font-bold mb-4">{type.toUpperCase()} News</h1>
             <div className="space-y-4 lg:w-1/2">
                 {news.map((item, index) => (
@@ -162,6 +149,20 @@ const CategoryPage = () => {
                 ))}
             </div>
         </div>
+    );
+};
+
+const CategoryPage = () => {
+    const searchParams = useSearchParams();
+    const type = searchParams.get('type');
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    if (!type) return <div>No category selected.</div>;
+
+    return (
+        <Suspense fallback={<div>Loading category...</div>}>
+            <NewsContent type={type} apiBaseUrl={apiBaseUrl} />
+        </Suspense>
     );
 };
 
