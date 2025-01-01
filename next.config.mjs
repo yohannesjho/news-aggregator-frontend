@@ -3,6 +3,9 @@ const nextConfig = {
     images: {
         domains: ['websitedemos.net',"gizmodo.com"], 
       },
+      experimental: {
+        missingSuspenseWithCSRBailout: false,
+      },
        
       
 };
