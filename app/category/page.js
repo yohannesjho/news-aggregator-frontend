@@ -1,14 +1,11 @@
 'use client';
 
-import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-const CategoryContent = ({ type, fetchNews, filters, handleFilterChange, news, loading, error }) => {
-    useEffect(() => {
-        fetchNews(filters);
-    }, [filters, type]);
+export const dynamic = 'force-dynamic';
 
+const CategoryContent = ({ type, filters, handleFilterChange, news, loading, error }) => {
     if (!type) return <div>No category selected.</div>;
     if (loading) return <div>Loading news...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -27,20 +24,7 @@ const CategoryContent = ({ type, fetchNews, filters, handleFilterChange, news, l
                     <option value="">Select Country</option>
                     <option value="us">United States</option>
                     <option value="gb">United Kingdom</option>
-                    <option value="ca">Canada</option>
-                    <option value="au">Australia</option>
-                    <option value="cn">China</option>
-                    <option value="jp">Japan</option>
-                    <option value="de">Germany</option>
-                    <option value="fr">France</option>
-                    <option value="it">Italy</option>
-                    <option value="in">India</option>
-                    <option value="za">South Africa</option>
-                    <option value="br">Brazil</option>
-                    <option value="mx">Mexico</option>
-                    <option value="kr">South Korea</option>
-                    <option value="ru">Russia</option>
-                    
+                    {/* Add more countries */}
                 </select>
 
                 {/* Language Filter */}
@@ -53,15 +37,7 @@ const CategoryContent = ({ type, fetchNews, filters, handleFilterChange, news, l
                     <option value="">Select Language</option>
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="zh">Chinese</option>
-                    <option value="ja">Japanese</option>
-                    <option value="ru">Russian</option>
-                    <option value="ar">Arabic</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="hi">Hindi</option>
-                    
+                    {/* Add more languages */}
                 </select>
 
                 {/* Keyword Filter */}
@@ -74,17 +50,8 @@ const CategoryContent = ({ type, fetchNews, filters, handleFilterChange, news, l
                     <option value="">Select Keyword</option>
                     <option value="technology">Technology</option>
                     <option value="sports">Sports</option>
-                    <option value="politics">Politics</option>
-                    <option value="health">Health</option>
-                    <option value="business">Business</option>
-                    <option value="science">Science</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="travel">Travel</option>
-                    <option value="education">Education</option>
-                    <option value="environment">Environment</option>
-                   
+                    {/* Add more keywords */}
                 </select>
-
             </div>
 
             <h1 className="text-2xl font-bold mb-4">{type.toUpperCase()} News</h1>
@@ -118,8 +85,7 @@ const CategoryContent = ({ type, fetchNews, filters, handleFilterChange, news, l
 const CategoryPage = () => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const searchParams = useSearchParams();
-    const type = searchParams.get('type');
-
+    const [type, setType] = useState(null);
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -155,18 +121,24 @@ const CategoryPage = () => {
         }));
     };
 
+    useEffect(() => {
+        const categoryType = searchParams.get('type');
+        if (categoryType) setType(categoryType);
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (type) fetchNews(filters);
+    }, [type, filters]);
+
     return (
-        <Suspense fallback={<div>Loading category data...</div>}>
-            <CategoryContent
-                type={type}
-                fetchNews={fetchNews}
-                filters={filters}
-                handleFilterChange={handleFilterChange}
-                news={news}
-                loading={loading}
-                error={error}
-            />
-        </Suspense>
+        <CategoryContent
+            type={type}
+            filters={filters}
+            handleFilterChange={handleFilterChange}
+            news={news}
+            loading={loading}
+            error={error}
+        />
     );
 };
 
