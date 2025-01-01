@@ -2,8 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
-export const dynamic = 'force-dynamic';
+ 
 
 const CategoryContent = ({ type, filters, handleFilterChange, news, loading, error }) => {
     if (!type) return <div>No category selected.</div>;
