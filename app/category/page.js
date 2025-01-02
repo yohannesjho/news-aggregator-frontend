@@ -1,19 +1,80 @@
-'use client';
+'use client'
+import { useSearchParams } from "next/navigation";
 
-import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
- 
+import { useState, useEffect, Suspense } from 'react'
 
-const CategoryContent = ({ type, filters, handleFilterChange, news, loading, error }) => {
+const CategoryPage = () => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const searchParams = useSearchParams();
+    const type = searchParams.get("type");
+
+    const [news, setNews] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [filters, setFilters] = useState({
+        keyword: "",
+        language: "",
+        country: "",
+    });
+
+
+
+    const fetchNews = async (filters = {}) => {
+        setLoading(true);
+        try {
+            
+            let endpoint = `${apiBaseUrl}/api/news/topheadlines/${type}?`;
+
+            // Apply the filters to the endpoint
+
+            if (filters.keyword) endpoint += `&keyword=${filters.keyword}`;
+            if (filters.language) endpoint += `&language=${filters.language}`;
+            if (filters.country) endpoint += `&country=${filters.country}`;
+
+
+            const response = await fetch(endpoint);
+
+            if (!response.ok) throw new Error("Failed to fetch news data");
+            const data = await response.json();
+            // console.log(data.data.articles)
+            setNews(data.data.articles); // Assuming `articles` contains the news data
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+    useEffect(() => {
+        fetchNews(filters);
+    }, [filters, type]);
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+
+
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }));
+    };
+
     if (!type) return <div>No category selected.</div>;
+
     if (loading) return <div>Loading news...</div>;
+
     if (error) return <div>Error: {error}</div>;
 
     return (
+
+
         <div className="p-8">
+
             {/* Filter Controls */}
             <div className="space-x-4 mb-4">
-                {/* Country Filter */}
                 <select
                     name="country"
                     value={filters.country}
@@ -23,10 +84,17 @@ const CategoryContent = ({ type, filters, handleFilterChange, news, loading, err
                     <option value="">Select Country</option>
                     <option value="us">United States</option>
                     <option value="gb">United Kingdom</option>
+                    <option value="ca">Canada</option>
+                    <option value="au">Australia</option>
+                    <option value="cn">China</option>
+                    <option value="jp">Japan</option>
+                    <option value="de">Germany</option>
+                    <option value="fr">France</option>
+                    <option value="it">Italy</option>
+                    <option value="in">India</option>
                     {/* Add more countries */}
                 </select>
 
-                {/* Language Filter */}
                 <select
                     name="language"
                     value={filters.language}
@@ -36,10 +104,10 @@ const CategoryContent = ({ type, filters, handleFilterChange, news, loading, err
                     <option value="">Select Language</option>
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
+                    <option value="fr">French</option>
                     {/* Add more languages */}
                 </select>
 
-                {/* Keyword Filter */}
                 <select
                     name="keyword"
                     value={filters.keyword}
@@ -47,9 +115,25 @@ const CategoryContent = ({ type, filters, handleFilterChange, news, loading, err
                     className="p-2 border rounded"
                 >
                     <option value="">Select Keyword</option>
-                    <option value="technology">Technology</option>
-                    <option value="sports">Sports</option>
-                    {/* Add more keywords */}
+                    <option value="bitcoin">bitcoin</option>
+                    <option value="machine-learning">machinelearning</option>
+                    <option value="quantum-computing">quantum computing</option>
+                    <option value="stock-market">stock market</option>
+                    <option value="investments">investments</option>
+                    <option value="startups">startups</option>
+                    <option value="Olympics">Olympics</option>
+                    <option value="World Cup">World Cup</option>
+                    <option value="NBA">NBA</option>
+                    <option value="tennis">tennis</option>
+                    <option value="crickets">cricket</option>
+                    <option value="elections">election</option>
+                    <option value="policy">policy</option>
+                    <option value="parliaments">parliament</option>
+                    <option value="laws">laws</option>
+                    <option value="vaccine">vaccine</option>
+                    <option value="vaccine">vaccine</option>
+                    <option value="fitness">fitness</option>
+                    {/* Add more sources */}
                 </select>
             </div>
 
@@ -81,64 +165,13 @@ const CategoryContent = ({ type, filters, handleFilterChange, news, loading, err
     );
 };
 
-const CategoryPage = () => {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const searchParams = useSearchParams();
-    const [type, setType] = useState(null);
-    const [news, setNews] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [filters, setFilters] = useState({
-        keyword: '',
-        language: '',
-        country: '',
-    });
-
-    const fetchNews = async (filters = {}) => {
-        setLoading(true);
-        try {
-            let endpoint = `${apiBaseUrl}/api/news/topheadlines/${type}?`;
-            if (filters.keyword) endpoint += `&keyword=${filters.keyword}`;
-            if (filters.language) endpoint += `&language=${filters.language}`;
-            if (filters.country) endpoint += `&country=${filters.country}`;
-            const response = await fetch(endpoint);
-            if (!response.ok) throw new Error('Failed to fetch news data');
-            const data = await response.json();
-            setNews(data.data.articles);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: value,
-        }));
-    };
-
-    useEffect(() => {
-        const categoryType = searchParams.get('type');
-        if (categoryType) setType(categoryType);
-    }, [searchParams]);
-
-    useEffect(() => {
-        if (type) fetchNews(filters);
-    }, [type, filters]);
-
+export function Category() {
     return (
-        <CategoryContent
-            type={type}
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            news={news}
-            loading={loading}
-            error={error}
-        />
-    );
-};
+       
+      <Suspense>
+        <CategoryPage />
+      </Suspense>
+    )
+  }
 
-export default CategoryPage;
+export default Category;
