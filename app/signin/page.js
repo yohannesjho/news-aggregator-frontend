@@ -34,7 +34,7 @@ export default function Signin() {
 
       //set the token to local storage
 
-      localStorage.setItem('user', data.user)
+      localStorage.setItem('newsUser', data.user)
 
        
 

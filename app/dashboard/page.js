@@ -12,7 +12,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const token = localStorage.getItem('user');
+            const token = localStorage.getItem('newsUser');
              
 
             if (!token) {
@@ -45,7 +45,14 @@ export default function Dashboard() {
         fetchUser();
     }, [router]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
     console.log(user)
 
     return (
@@ -56,7 +63,7 @@ export default function Dashboard() {
                 <button
                     className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-800"
                     onClick={() => {
-                        localStorage.removeItem('user');
+                        localStorage.removeItem('newsUser');
                         router.push('/');
                     }}
                 >

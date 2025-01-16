@@ -3,14 +3,17 @@
 const { SearchIcon, Menu } = require("lucide-react")
 const { default: Link } = require("next/link");
 const { useState, useEffect } = require("react");
+const { useAuth } = require("../AuthContext");
 
 const Header = () => {
+    const { token, handleLogout } = useAuth();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const checkAuth = () => {
             // Check authentication status  
-            const user = localStorage.getItem('user');
+            const user = localStorage.getItem('newsUser');
+            console.log(user)
              
             setIsAuthenticated(user !== null); // Example: if user is found in localStorage, they're authenticated
         };
@@ -40,7 +43,7 @@ const Header = () => {
                 
 
                 {/* Conditionally render buttons based on authentication */}
-                {isAuthenticated ? (
+                {token ? (
                     <Link href="/dashboard">
                         <button className="text-sm">Dashboard</button>
                     </Link>

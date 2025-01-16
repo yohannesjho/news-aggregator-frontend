@@ -18,7 +18,7 @@ export default function Home() {
     const fetchNews = async () => {
       try {
         const response = await fetch(`${apiBaseUrl}/api/news`);
-       
+
         if (!response.ok) throw new Error("Failed to fetch news");
 
         const data = await response.json();
@@ -43,7 +43,14 @@ export default function Home() {
     setFilteredNews(filtered);
   }, [searchQuery, news]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if (error) return <div>Error: {error}</div>;
 
   return (

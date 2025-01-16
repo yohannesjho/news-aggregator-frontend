@@ -64,7 +64,14 @@ const CategoryPage = () => {
 
     if (!type) return <div>No category selected.</div>;
 
-    if (loading) return <div>Loading news...</div>;
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
 
     if (error) return <div>Error: {error}</div>;
 
